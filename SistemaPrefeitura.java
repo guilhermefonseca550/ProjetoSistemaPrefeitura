@@ -30,11 +30,12 @@ public class SistemaPrefeitura {
             System.out.print("Digite o número de dependentes novamente: ");
             numeroDependentes = entrada.nextInt();
         }
-        System.out.println("Possui deficiência? Sim ou não");
+        System.out.println("Possui deficiência? Sim ou nao");
         String possuiDeficiencia = entrada.next();
-        while (!possuiDeficiencia.equalsIgnoreCase("sim") && !possuiDeficiencia.equalsIgnoreCase("nao")) {
-            System.out.println("Resposta inválida. Por favor, digite 'Sim' ou 'Não'.");
-            System.out.println("Possui deficiência? Sim ou não");
+        possuiDeficiencia = possuiDeficiencia.replace("não", "nao");
+        while (!possuiDeficiencia.equalsIgnoreCase(possuiDeficiencia.replace("não", "nao")) && !possuiDeficiencia.equalsIgnoreCase("nao")) {
+            System.out.println("Resposta inválida. Por favor, digite 'sim' ou 'nao'.");
+            System.out.println("Possui deficiência? Sim ou nao");
             possuiDeficiencia = entrada.next();
         }
         System.out.println("Qual o tempo de desemprego em meses? ");
@@ -46,9 +47,10 @@ public class SistemaPrefeitura {
             }
         System.out.println("Digite o risco do seu bairro (Alto, Médio ou Baixo): ");
         String riscoBairro = entrada.next();
+    
         while (!riscoBairro.equalsIgnoreCase("Alto") && !riscoBairro.equalsIgnoreCase("Medio") && !riscoBairro.equalsIgnoreCase("Baixo")) {
-            System.out.println("Resposta inválida. Por favor, digite 'Alto', 'Médio' ou 'Baixo'.");
-            System.out.println("Digite o risco do seu bairro (Alto, Médio ou Baixo): ");
+            System.out.println("Resposta inválida. Por favor, digite 'Alto', 'Medio' ou 'Baixo'.");
+            System.out.println("Digite o risco do seu bairro (Alto, Medio ou Baixo): ");
             riscoBairro = entrada.next();
         }
 
@@ -59,7 +61,14 @@ public class SistemaPrefeitura {
         int pontosDeficiencia = calcularDeficienciaPontuacao(possuiDeficiencia);
         int pontosDesemprego = calcularDesempregoPontuacao(tempoDesemprego);
         int pontosRiscoBairro = calcularRiscoBairroPontuacao(riscoBairro);
-        calcularPontuacaoTotal(pontosRenda, pontosDependentes, pontosDeficiencia, pontosDesemprego, pontosRiscoBairro);
+        double pontuacaoTotal = calcularPontuacaoTotal(pontosRenda, pontosDependentes, pontosDeficiencia, pontosDesemprego, pontosRiscoBairro);
+        if (pontuacaoTotal >= 15) {
+            System.out.println("Parabéns! Você é elegível para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
+        } else if (pontuacaoTotal >= 10) {
+            System.out.println("Você está na fila de espera para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
+        } else {
+            System.out.println("Infelizmente, você não é elegível para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
+        }
     }
     public static double calcularRendaPontuacao(double rendaPerCapita) {
         double pontosRenda = 0.0;
@@ -89,9 +98,9 @@ public class SistemaPrefeitura {
         possuiDeficiencia = possuiDeficiencia.trim(); // Remove espaços em branco
         possuiDeficiencia = possuiDeficiencia.toLowerCase(); // Converte para minúsculas
         possuiDeficiencia = possuiDeficiencia.replace("não", "nao").replace("sim", "sim"); // Normaliza os valores
-        if (possuiDeficiencia.equalsIgnoreCase("Sim")) {
+        if (possuiDeficiencia.equalsIgnoreCase("sim")) {
             pontosDeficiencia = 5;
-        } else if (possuiDeficiencia.equalsIgnoreCase("Nao")) {
+        } else if (possuiDeficiencia.equalsIgnoreCase("nao")) {
             pontosDeficiencia = 0;
         }
         return pontosDeficiencia;
@@ -121,7 +130,13 @@ public class SistemaPrefeitura {
     }
 public static double calcularPontuacaoTotal(double pontosRenda, int pontosDependentes, int pontosDeficiencia, int pontosDesemprego, int pontosRiscoBairro) {
         double pontuacaoTotal = pontosRenda + pontosDependentes + pontosDeficiencia + pontosDesemprego + pontosRiscoBairro;
-        System.out.println("Pontuação total: " + pontuacaoTotal);
+        if (pontuacaoTotal >= 15) {
+            System.out.println("Você faz parte da fila prioritária para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
+        } else if (pontuacaoTotal >= 8) {
+            System.out.println("Você está na fila de espera para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
+        } else {
+            System.out.println("Infelizmente, você não é elegível para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
+        }
         return pontuacaoTotal;
     }
 }
