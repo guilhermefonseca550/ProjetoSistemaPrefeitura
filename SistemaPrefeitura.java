@@ -1,60 +1,43 @@
 import java.util.Scanner;
 public class SistemaPrefeitura {
+
     public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
-        
         System.out.print("Digite sua renda per capita: ");
-        double rendaPerCapita = entrada.nextDouble();
-        int i = 1;
-        while (rendaPerCapita < 0) {
-            System.out.println("A renda per capita deve ser um valor positivo.");
-            System.out.print("Digite sua renda per capita novamente: ");
-            rendaPerCapita = entrada.nextDouble();
-            i++;
-            if (i == 3 && rendaPerCapita < 0) {
-            rendaPerCapita = Double.MAX_VALUE; 
-}
-            if (i == 3) {
-                System.out.println("----------------------------------------------------------------");  
-                System.out.println("Número máximo de tentativas atingido. Continuando para o próximo campo.");
-                System.out.println("----------------------------------------------------------------"); 
-                break;
-            }
+            double rendaPerCapita = entrada.nextDouble();
+            limitador(rendaPerCapita, Double.MAX_VALUE); // ← passa o valor máximo como fallback
             
-        }
+        
         System.out.print("Digite o número de dependentes: ");
-        int numeroDependentes = entrada.nextInt(); 
-        while (numeroDependentes < 0) {
-            
-            System.out.println("O número de dependentes deve ser um valor positivo.");
-            System.out.print("Digite o número de dependentes novamente: ");
-            numeroDependentes = entrada.nextInt();
-        }
-        System.out.println("Possui deficiência? Sim ou nao");
-        String possuiDeficiencia = entrada.next();
-        possuiDeficiencia = possuiDeficiencia.replace("não", "nao");
-        while (!possuiDeficiencia.equalsIgnoreCase(possuiDeficiencia.replace("não", "nao")) && !possuiDeficiencia.equalsIgnoreCase("nao")) {
-            System.out.println("Resposta inválida. Por favor, digite 'sim' ou 'nao'.");
-            System.out.println("Possui deficiência? Sim ou nao");
-            possuiDeficiencia = entrada.next();
+            int numeroDependentes = entrada.nextInt(); 
+            limitador(numeroDependentes, Integer.MIN_VALUE);
+        
+      
+        System.out.println("Possui deficiência? S para SIM ou N para NÃO");
+            String possuiDeficiencia = entrada.next();
+            String possuiDeficienciaNormalizado = possuiDeficiencia.trim().toLowerCase();
+            int c = 1;
+            while (!possuiDeficienciaNormalizado.equals("s") && !possuiDeficienciaNormalizado.equals("n")) {
+                System.out.println("Resposta inválida. Por favor, digite 's' para SIM ou 'n' para NÃO");
+                possuiDeficienciaNormalizado = entrada.next();
+                 c++;
+                 if (c == 3 && !possuiDeficienciaNormalizado.equals("s") && !possuiDeficienciaNormalizado.equals("n")) {
+                    possuiDeficiencia = "n";  
+                    System.out.println("----------------------------------------------------------------");  
+                    System.out.println("Número máximo de tentativas atingido. Continuando para o próximo campo.");
+                    System.out.println("----------------------------------------------------------------");
+                     break;
+    }
+
         }
         System.out.println("Qual o tempo de desemprego em meses? ");
-        int tempoDesemprego = entrada.nextInt();
-            while (tempoDesemprego < 0) {
-                System.out.println("O tempo de desemprego deve ser um valor positivo.");
-                System.out.println("Qual o tempo de desemprego em meses? ");
-                tempoDesemprego = entrada.nextInt();
-            }
-        System.out.println("Digite o risco do seu bairro (Alto, Médio ou Baixo): ");
-        String riscoBairro = entrada.next();
-    
-        while (!riscoBairro.equalsIgnoreCase("Alto") && !riscoBairro.equalsIgnoreCase("Medio") && !riscoBairro.equalsIgnoreCase("Baixo")) {
-            System.out.println("Resposta inválida. Por favor, digite 'Alto', 'Medio' ou 'Baixo'.");
-            System.out.println("Digite o risco do seu bairro (Alto, Medio ou Baixo): ");
-            riscoBairro = entrada.next();
-        }
+            int tempoDesemprego = entrada.nextInt();
+            limitador(tempoDesemprego, Integer.MIN_VALUE);
+            
+        System.out.println("Digite o risco do seu bairro sendo 0 para Baixo, 1 para Médio e 2 para Alto: ");
+        int riscoBairro = entrada.nextInt();
+        limitador(riscoBairro, 0);
 
-        entrada.close();
 
         double pontosRenda = calcularRendaPontuacao(rendaPerCapita);
         int pontosDependentes = calcularDependentesPontuacao(numeroDependentes);                
@@ -68,8 +51,9 @@ public class SistemaPrefeitura {
             System.out.println("Você está na fila de espera para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
         } else {
             System.out.println("Infelizmente, você não é elegível para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
-        }
-    }
+      }
+   entrada.close();
+   }
     public static double calcularRendaPontuacao(double rendaPerCapita) {
         double pontosRenda = 0.0;
         if (rendaPerCapita <= 350.00) {
@@ -94,16 +78,15 @@ public class SistemaPrefeitura {
     }
     
     public static int calcularDeficienciaPontuacao(String possuiDeficiencia) {
-        int pontosDeficiencia = 0;
-        possuiDeficiencia = possuiDeficiencia.trim(); // Remove espaços em branco
-        possuiDeficiencia = possuiDeficiencia.toLowerCase(); // Converte para minúsculas
-        possuiDeficiencia = possuiDeficiencia.replace("não", "nao").replace("sim", "sim"); // Normaliza os valores
-        if (possuiDeficiencia.equalsIgnoreCase("sim")) {
-            pontosDeficiencia = 5;
-        } else if (possuiDeficiencia.equalsIgnoreCase("nao")) {
-            pontosDeficiencia = 0;
-        }
-        return pontosDeficiencia;
+    int pontosDeficiencia = 0;
+
+    if (possuiDeficiencia.equals("s")) {
+        pontosDeficiencia = 5;
+    } else if (possuiDeficiencia.equals("n")) {
+        pontosDeficiencia = 0;
+    }
+
+    return pontosDeficiencia;
     }
     public static int calcularDesempregoPontuacao(int tempoDesemprego) {
         int pontosDesemprego = 0;
@@ -114,29 +97,44 @@ public class SistemaPrefeitura {
         }
         return pontosDesemprego;
     }
-    public static int calcularRiscoBairroPontuacao(String riscoBairro) {
+    public static int calcularRiscoBairroPontuacao(int riscoBairro) {
         int pontosRiscoBairro = 0;
-        riscoBairro = riscoBairro.trim(); // Remove espaços em branco
-        riscoBairro = riscoBairro.toLowerCase(); // Converte para minúsculas
-        riscoBairro = riscoBairro.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o"); // Remove acentos, se necessário
-        if (riscoBairro.equalsIgnoreCase("Alto")) {
-            pontosRiscoBairro = 5;
-        } else if (riscoBairro.equalsIgnoreCase("Medio")) {
-            pontosRiscoBairro = 3;
-        } else if (riscoBairro.equalsIgnoreCase("Baixo")) {
+        if (riscoBairro == 0) {
             pontosRiscoBairro = 0;
+        } else if (riscoBairro == 1) {
+            pontosRiscoBairro = 3;
+        } else if (riscoBairro == 2) {
+            pontosRiscoBairro = 5;
         }
         return pontosRiscoBairro;
     }
 public static double calcularPontuacaoTotal(double pontosRenda, int pontosDependentes, int pontosDeficiencia, int pontosDesemprego, int pontosRiscoBairro) {
         double pontuacaoTotal = pontosRenda + pontosDependentes + pontosDeficiencia + pontosDesemprego + pontosRiscoBairro;
-        if (pontuacaoTotal >= 15) {
-            System.out.println("Você faz parte da fila prioritária para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
-        } else if (pontuacaoTotal >= 8) {
-            System.out.println("Você está na fila de espera para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
-        } else {
-            System.out.println("Infelizmente, você não é elegível para o programa de auxílio. Sua pontuação total é: " + pontuacaoTotal);
-        }
+   
         return pontuacaoTotal;
     }
+public static double limitador(double metodo, double fallback) {
+    
+    Scanner entrada = new Scanner(System.in);
+    int i = 1;
+   
+    while (metodo < 0) {
+        System.out.println("O valor deve ser um valor positivo.");
+        System.out.print("Digite o valor novamente: ");
+        metodo = entrada.nextDouble();
+        
+        i++;
+        if (i == 3 && metodo < 0) {
+            metodo = fallback;  // ← usa o fallback passado
+            System.out.println("----------------------------------------------------------------");  
+            System.out.println("Número máximo de tentativas atingido. Continuando para o próximo campo.");
+            System.out.println("----------------------------------------------------------------"); 
+        
+            break;
+            
+     }
+     entrada.close();    }
+     return metodo;  
 }
+ }
+    

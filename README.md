@@ -2,17 +2,16 @@
 
 # 🏛️ Sistema Prefeitura — Programa de Auxílio Social
 
-Sistema de triagem para programas de auxílio social da prefeitura. O programa coleta dados socioeconômicos do cidadão, calcula uma pontuação e determina sua elegibilidade e prioridade na fila de atendimento.
+Sistema de triagem automatizada para elegibilidade em programas de auxílio social da prefeitura. O programa coleta dados socioeconômicos do cidadão, calcula uma pontuação e determina se ele é elegível, está na fila de espera ou não se qualifica para o benefício. Criado para fins acadêmicos.
 
 ---
 
 ## 📋 Funcionalidades
 
-- Coleta de dados via terminal (linha de comando)
-- Validação de entradas com mensagens de erro amigáveis
-- Limite de tentativas para campo de renda (3 tentativas)
-- Cálculo automático de pontuação por critérios sociais
-- Classificação do cidadão em três categorias de elegibilidade
+- Coleta de dados via terminal (Scanner)
+- Validação de entradas com limite de tentativas
+- Cálculo de pontuação baseado em critérios sociais
+- Classificação automática em três categorias de resultado
 
 ---
 
@@ -21,7 +20,7 @@ Sistema de triagem para programas de auxílio social da prefeitura. O programa c
 | Critério              | Condição                        | Pontos |
 |-----------------------|---------------------------------|--------|
 | **Renda per capita**  | Até R$ 350,00                   | 5      |
-|                       | De R$ 350,01 a R$ 500,00        | 3      |
+|                       | R$ 350,01 a R$ 500,00           | 3      |
 |                       | Acima de R$ 500,00              | 0      |
 | **Dependentes**       | 3 ou mais                       | 5      |
 |                       | 2 dependentes                   | 3      |
@@ -29,82 +28,63 @@ Sistema de triagem para programas de auxílio social da prefeitura. O programa c
 |                       | Nenhum                          | 0      |
 | **Deficiência**       | Sim                             | 5      |
 |                       | Não                             | 0      |
-| **Tempo desempregado**| Mais de 12 meses                | 5      |
-|                       | Até 12 meses                    | 0      |
-| **Risco do bairro**   | Alto                            | 5      |
-|                       | Médio                           | 3      |
-|                       | Baixo                           | 0      |
+| **Tempo de desemprego** | Mais de 12 meses              | 5      |
+|                       | 12 meses ou menos               | 0      |
+| **Risco do bairro**   | Alto (2)                        | 5      |
+|                       | Médio (1)                       | 3      |
+|                       | Baixo (0)                       | 0      |
 
 **Pontuação máxima possível: 25 pontos**
 
 ---
 
-## 🏆 Resultado da Avaliação
+## 🏆 Resultado
 
-| Pontuação Total | Resultado                                          |
-|-----------------|----------------------------------------------------|
-| ≥ 15 pontos     | ✅ Fila **prioritária** para o programa de auxílio |
-| 8 a 14 pontos   | ⏳ Fila de **espera** para o programa de auxílio   |
-| < 8 pontos      | ❌ **Não elegível** para o programa de auxílio     |
+| Pontuação Total | Resultado                              |
+|-----------------|----------------------------------------|
+| ≥ 15 pontos     | ✅ Elegível para o programa de auxílio |
+| 10 a 14 pontos  | ⏳ Na fila de espera                   |
+| < 10 pontos     | ❌ Não elegível                        |
 
 ---
 
 ## ▶️ Como Executar
 
 ### Pré-requisitos
-
 - Java JDK 8 ou superior instalado
-- Terminal (Prompt de Comando, PowerShell, Bash, etc.)
+- Terminal / prompt de comando
 
-### Compilação
+### Compilação e execução
 
 ```bash
+# Compilar
 javac SistemaPrefeitura.java
-```
 
-### Execução
-
-```bash
+# Executar
 java SistemaPrefeitura
 ```
 
----
-
-## 💬 Exemplo de Uso
+### Exemplo de uso
 
 ```
 Digite sua renda per capita: 300
 Digite o número de dependentes: 3
-Possui deficiência? Sim ou não
-sim
+Possui deficiência? S para SIM ou N para NÃO
+n
 Qual o tempo de desemprego em meses?
-14
-Digite o risco do seu bairro (Alto, Médio ou Baixo):
-Alto
-Você faz parte da fila prioritária para o programa de auxílio.
+15
+Digite o risco do seu bairro sendo 0 para Baixo, 1 para Médio e 2 para Alto:
+2
+
+Parabéns! Você é elegível para o programa de auxílio. Sua pontuação total é: 20.0
 ```
 
 ---
 
-## ⚙️ Entradas Aceitas
+## 🛡️ Validações
 
-| Campo              | Tipo    | Valores válidos                  |
-|--------------------|---------|----------------------------------|
-| Renda per capita   | Decimal | Número positivo (ex: `350.00`)   |
-| Dependentes        | Inteiro | Número inteiro ≥ 0               |
-| Deficiência        | Texto   | `Sim` ou `Nao`                   |
-| Tempo desempregado | Inteiro | Número inteiro ≥ 0 (em meses)    |
-| Risco do bairro    | Texto   | `Alto`, `Medio` ou `Baixo`       |
-
-> ⚠️ **Atenção:** Para o campo "Possui deficiência", digite `Nao` sem acento. Para o risco do bairro, `Medio` também sem acento.
-
----
-
-## 🔒 Validações e Limites
-
-- **Renda per capita:** aceita apenas valores positivos. Após **3 tentativas inválidas**, o sistema avança automaticamente com valor máximo (sem pontuação nesse critério).
-- **Dependentes e tempo de desemprego:** validados em loop até entrada correta.
-- **Deficiência e risco do bairro:** aceitam variações de maiúsculas/minúsculas (`SIM`, `Sim`, `sim`).
+- **Valores negativos**: o programa solicita nova entrada; após 2 tentativas inválidas, usa um valor de fallback e prossegue.
+- **Campo deficiência**: aceita apenas `s` ou `n` (maiúsculo ou minúsculo); após 2 tentativas inválidas, assume `n` automaticamente.
 
 ---
 
@@ -113,17 +93,20 @@ Você faz parte da fila prioritária para o programa de auxílio.
 ```
 SistemaPrefeitura.java
 │
-├── main()                        — Fluxo principal e coleta de dados
-├── calcularRendaPontuacao()      — Pontuação pela renda per capita
-├── calcularDependentesPontuacao()— Pontuação pelo número de dependentes
-├── calcularDeficienciaPontuacao()— Pontuação pela presença de deficiência
-├── calcularDesempregoPontuacao() — Pontuação pelo tempo de desemprego
-├── calcularRiscoBairroPontuacao()— Pontuação pelo risco do bairro
-└── calcularPontuacaoTotal()      — Soma e exibe o resultado final
+├── main()                          → Fluxo principal e coleta de dados
+├── calcularRendaPontuacao()        → Pontuação por renda per capita
+├── calcularDependentesPontuacao()  → Pontuação por número de dependentes
+├── calcularDeficienciaPontuacao()  → Pontuação por deficiência
+├── calcularDesempregoPontuacao()   → Pontuação por tempo de desemprego
+├── calcularRiscoBairroPontuacao()  → Pontuação pelo risco do bairro
+├── calcularPontuacaoTotal()        → Soma de todos os pontos
+└── limitador()                     → Validação de entradas numéricas
 ```
 
 ---
 
-## 📄 Licença
+## 📌 Observações
 
-Este projeto foi desenvolvido para fins acadêmicos e de uso público.
+- O programa roda inteiramente no terminal, sem interface gráfica.
+- Todas as entradas são lidas via `Scanner` do `System.in`.
+- Projeto desenvolvido para fins educacionais / acadêmicos.
