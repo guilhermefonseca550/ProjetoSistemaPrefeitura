@@ -133,7 +133,7 @@ public static double limitador(double metodo, double fallback) {
             break;
             
      }
-     entrada.close();    }
+         }
      return metodo;  
 }
  }
