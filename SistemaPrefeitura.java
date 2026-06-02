@@ -5,7 +5,7 @@ public class SistemaPrefeitura {
         Scanner entrada = new Scanner(System.in);
         System.out.print("Digite sua renda per capita: ");
             double rendaPerCapita = entrada.nextDouble();
-            limitador(rendaPerCapita, Double.MAX_VALUE); // ← passa o valor máximo como fallback
+            limitador(rendaPerCapita, Double.MAX_VALUE); 
             
         
         System.out.print("Digite o número de dependentes: ");
@@ -125,7 +125,7 @@ public static double limitador(double metodo, double fallback) {
         
         i++;
         if (i == 3 && metodo < 0) {
-            metodo = fallback;  // ← usa o fallback passado
+            metodo = fallback;  
             System.out.println("----------------------------------------------------------------");  
             System.out.println("Número máximo de tentativas atingido. Continuando para o próximo campo.");
             System.out.println("----------------------------------------------------------------"); 
