@@ -1,3 +1,5 @@
+package idea.src.main.java.familia.calculos;
+
 import java.util.Scanner;
 public class SistemaPrefeitura {
 
