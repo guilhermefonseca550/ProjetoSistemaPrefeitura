@@ -1,22 +1,18 @@
-package idea.src.main.java.familia.calculos;
+package idea.src.main.java.prefeitura.calculos;
 
 import idea.src.main.java.familia.Pessoa;
 
-public class CalcularRiscoBairro extends Pessoa implements CalculosInterface{
+public class CalcularRiscoBairro implements CalculosInterface{
 
-
-    public CalcularRiscoBairro(double renda, int dependentes, boolean deficiencia, int tempoDesemprego, int riscoBairro) {
-        super(renda, dependentes, deficiencia, tempoDesemprego, riscoBairro);
-    }
 
     @Override
-    public void calcular() {
-        if(getRiscoBairro() == 0){
-            setPontoRiscoBairro(0);
-        } else if (getRiscoBairro() == 1) {
-            setPontoRiscoBairro(3);
-        } else if (getRiscoBairro() == 2) {
-            setPontoRiscoBairro(5);
+    public double calcular(Pessoa pessoa) {
+        if(pessoa.getRiscoBairro() == 2){
+            return 5;
+        }else if(pessoa.getRiscoBairro() == 1){
+            return 3;
+        }else{
+            return 0;
         }
     }
 }

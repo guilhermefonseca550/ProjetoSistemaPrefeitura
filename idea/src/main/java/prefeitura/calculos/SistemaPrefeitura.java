@@ -1,4 +1,4 @@
-package idea.src.main.java.familia.calculos;
+package idea.src.main.java.prefeitura.calculos;
 
 import java.util.Scanner;
 public class SistemaPrefeitura {

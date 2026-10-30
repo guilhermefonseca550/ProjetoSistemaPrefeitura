@@ -1,21 +1,19 @@
-package idea.src.main.java.familia.calculos;
+package idea.src.main.java.prefeitura.calculos;
 
 import idea.src.main.java.familia.Pessoa;
+import idea.src.main.java.prefeitura.Resultado;
 
-public class CalculoDeficiencia extends Pessoa implements CalculosInterface{
+public class CalculoDeficiencia implements CalculosInterface{
 
-
-    public CalculoDeficiencia(double renda, int dependentes, boolean deficiencia, int tempoDesemprego, int riscoBairro) {
-        super(renda, dependentes, deficiencia, tempoDesemprego, riscoBairro);
-    }
 
     @Override
-    public void calcular() {
-        if(isDeficiencia()){
-         setPontosDeficiencia(getPontosDeficiencia() + 1);
+    public double calcular(Pessoa pessoa) {
+        if(pessoa.isDeficiencia()){
+            return 5.0;
         }
         else{
-            setPontosDeficiencia(0);
+            return 0.0;
         }
+
     }
 }

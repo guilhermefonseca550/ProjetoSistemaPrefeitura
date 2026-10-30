@@ -1,9 +1,9 @@
-package idea.src.main.java.familia.calculos;
+package idea.src.main.java.prefeitura.calculos;
 
 import idea.src.main.java.familia.Pessoa;
 
 public interface CalculosInterface  {
 
-    public void calcular();
+    public double calcular(Pessoa pessoa);
 
 }

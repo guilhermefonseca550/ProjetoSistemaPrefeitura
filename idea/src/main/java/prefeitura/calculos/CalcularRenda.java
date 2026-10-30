@@ -1,23 +1,18 @@
-package idea.src.main.java.familia.calculos;
+package idea.src.main.java.prefeitura.calculos;
 
 import idea.src.main.java.familia.Pessoa;
 
-public class CalcularRenda extends Pessoa{
+public class CalcularRenda implements CalculosInterface{
 
-
-    public CalcularRenda(double renda, int dependentes, boolean deficiencia, int tempoDesemprego, int riscoBairro) {
-        super(renda, dependentes, deficiencia, tempoDesemprego, riscoBairro);
-    }
 
     @Override
-    public void calcular() {
-        if (getRenda() <= 350.00) {
-            setPontosRenda(5);
-        } else if (getRenda() > 350.00 && getRenda() <= 500.00) {
-            setPontosRenda(3);
+    public double calcular(Pessoa pessoa) {
+        if (pessoa.getRenda() <= 350.00) {
+           return 5;
+        } else if (pessoa.getRenda() > 350.00 && pessoa.getRenda() <= 500.00) {
+            return 3;
         } else {
-            setPontosRenda(0);
+            return 0;
         }
-        System.out.println("sua renda é  " + getRenda());
     }
 }

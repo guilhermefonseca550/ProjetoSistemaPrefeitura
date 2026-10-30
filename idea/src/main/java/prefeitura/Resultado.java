@@ -1,4 +1,4 @@
 package idea.src.main.java.prefeitura;
 
-public record Resultado() {
+public record Resultado(double pontuacao, String status) {
 }

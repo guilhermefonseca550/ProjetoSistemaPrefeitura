@@ -58,10 +58,10 @@ Sistema de triagem automatizada para elegibilidade em programas de auxílio soci
 
 ```bash
 # Compilar
-javac SistemaPrefeitura.java
+javac idea.src.main.java.prefeitura.calculos.SistemaPrefeitura.java
 
 # Executar
-java SistemaPrefeitura
+java idea.src.main.java.prefeitura.calculos.SistemaPrefeitura
 ```
 
 ### Exemplo de uso
@@ -91,7 +91,7 @@ Parabéns! Você é elegível para o programa de auxílio. Sua pontuação total
 ## 🗂️ Estrutura do Código
 
 ```
-SistemaPrefeitura.java
+idea.src.main.java.prefeitura.calculos.SistemaPrefeitura.java
 │
 ├── main()                          → Fluxo principal e coleta de dados
 ├── calcularRendaPontuacao()        → Pontuação por renda per capita
